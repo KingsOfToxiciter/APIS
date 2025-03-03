@@ -4,11 +4,10 @@ const cors = require("cors");
 
 const app = express();
 const PORT = 3000;
-const YT_API_KEY = "AIzaSyAr5vEmnvwtmZmGODjCIZqmCGa9KXKEEdk"; // YouTube API Key
+const YT_API_KEY = "AIzaSyAr5vEmnvwtmZmGODjCIZqmCGa9KXKEEdk"; // YouTube API Key from .env
 
 app.use(cors());
 
-// YouTube থেকে গান অনুসন্ধান API
 app.get("/search", async (req, res) => {
     const songName = req.query.songName;
     
@@ -17,7 +16,7 @@ app.get("/search", async (req, res) => {
     }
 
     try {
-        const response = await axios.get(`https://www.googleapis.com/youtube/v3/search`, {
+        const response = await axios.get("https://www.googleapis.com/youtube/v3/search", {
             params: {
                 part: "snippet",
                 q: songName,
@@ -27,9 +26,18 @@ app.get("/search", async (req, res) => {
             }
         });
 
-        res.json(response.data);
+        // ফলাফল ফরম্যাট করে পাঠানো
+        const videos = response.data.items.map(item => ({
+            title: item.snippet.title,
+            videoId: item.id.videoId,
+            videoUrl: `https://www.youtube.com/watch?v=${item.id.videoId}`,
+            thumbnail: item.snippet.thumbnails.high.url
+        }));
+
+        res.json(videos);
     } catch (error) {
-        res.status(500).json({ error: "YouTube API কল করতে সমস্যা হয়েছে।" });
+        console.error("YouTube API ত্রুটি:", error.message);
+        res.status(500).json({ error: "YouTube API কল করতে সমস্যা হয়েছে।", details: error.message });
     }
 });
 
