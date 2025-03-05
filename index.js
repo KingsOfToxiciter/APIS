@@ -27,10 +27,10 @@ app.get("/search", async (req, res) => {
         });
 
         // ফলাফল ফরম্যাট করে পাঠানো
-        const videos = response.data.items.map(item => {
+        const videos = response.data.items.map(item => ({
             videoId: item.id.videoId,
             videoUrl: `https://www.youtube.com/watch?v=${item.id.videoId}`
-        });
+        }));
 
         res.json(videos);
     } catch (error) {
