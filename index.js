@@ -22,7 +22,7 @@ app.get("/search", async (req, res) => {
                 q: songName,
                 type: "video",
                 key: YT_API_KEY,
-                maxResults: 1
+                maxResults: 5
             }
         });
 
