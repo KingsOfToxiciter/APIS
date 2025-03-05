@@ -22,16 +22,14 @@ app.get("/search", async (req, res) => {
                 q: songName,
                 type: "video",
                 key: YT_API_KEY,
-                maxResults: 5
+                maxResults: 1
             }
         });
 
         // ফলাফল ফরম্যাট করে পাঠানো
         const videos = response.data.items.map(item => ({
-            title: item.snippet.title,
             videoId: item.id.videoId,
-            videoUrl: `https://www.youtube.com/watch?v=${item.id.videoId}`,
-            thumbnail: item.snippet.thumbnails.high.url
+            videoUrl: `https://www.youtube.com/watch?v=${item.id.videoId}`
         }));
 
         res.json(videos);
