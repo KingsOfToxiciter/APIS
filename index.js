@@ -1,43 +1,35 @@
 const express = require("express");
-const axios = require("axios");
+const { exec } = require("child_process");
 const cors = require("cors");
 
 const app = express();
-const PORT = 3000;
-const YT_API_KEY = "AIzaSyAr5vEmnvwtmZmGODjCIZqmCGa9KXKEEdk"; // YouTube API Key from .env
-
 app.use(cors());
 
-app.get("/search", async (req, res) => {
-    const songName = req.query.songName;
-    
-    if (!songName) {
-        return res.status(400).json({ error: "songName প্রয়োজন!" });
+app.get("/download", (req, res) => {
+    const videoUrl = req.query.url;
+    const format = req.query.format || "best";
+    if (!videoUrl) {
+        return res.status(400).json({ error: "URL is required" });
     }
 
-    try {
-        const response = await axios.get("https://www.googleapis.com/youtube/v3/search", {
-            params: {
-                part: "snippet",
-                q: songName,
-                type: "video",
-                key: YT_API_KEY,
-                maxResults: 5
-            }
-        });
+    // yt-dlp দিয়ে ভিডিওর ডাইরেক্ট ডাউনলোড লিংক বের করা
+    const command = `yt-dlp -f ${format} --get-url "${videoUrl}"`;
 
-        // ফলাফল ফরম্যাট করে পাঠানো
-        const videos = response.data.items.map(item => ({
-            videoUrl: item.id.videoId
-        }));
+    exec(command, (error, stdout, stderr) => {
+        if (error) {
+            return res.status(500).json({ error: "Failed to fetch video", details: error.message });
+        }
 
-        res.json(videos);
-    } catch (error) {
-        console.error("YouTube API ত্রুটি:", error.message);
-        res.status(500).json({ error: "YouTube API কল করতে সমস্যা হয়েছে।", details: error.message });
-    }
+        const videoLink = stdout.trim();
+        if (!videoLink) {
+            return res.status(500).json({ error: "Could not extract video link" });
+        }
+
+        res.json({ videoUrl: videoLink });
+    });
 });
 
+const PORT = 3000;
 app.listen(PORT, () => {
-    console.log(`Server চলছে: http://localhost:${PORT}`);
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
