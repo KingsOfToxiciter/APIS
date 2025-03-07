@@ -29,6 +29,3 @@ jobs:
 
       - name: run index
         run: node index.js
-      - name: baigan
-        run: npm install 
-        run: npm start
