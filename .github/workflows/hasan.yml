@@ -1,19 +1,21 @@
-name: Restart Server Every 5 Hours
+name: Deploy Express Server
 
 on:
-  schedule:
-    - cron: "0 */5 * * *"  # প্রতি ৫ ঘণ্টা পর পর রান হবে
-  workflow_dispatch:  # চাইলে ম্যানুয়ালি রান করা যাবে
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  restart-server:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: |
           sudo apt update
           sudo apt install -y ffmpeg
@@ -21,5 +23,5 @@ jobs:
           sudo apt install -y nodejs npm
           npm install express cors
 
-      - name: Start Server
+      - name: Start Express Server in Background
         run: nohup node server.js > server.log 2>&1 &
