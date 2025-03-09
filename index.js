@@ -12,8 +12,8 @@ app.get("/download", (req, res) => {
         return res.status(400).json({ error: "URL is required" });
     }
 
-    // yt-dlp বাইনারি /tmp/yt-dlp/yt-dlp থেকে রান করুন
-    const command = `/tmp/yt-dlp/yt-dlp -f ${format} --get-url "${videoUrl}"`;
+    
+    const command = "bash -c '/tmp/yt-dlp/yt-dlp -f best --get-url \"" + videoUrl + "\"'";
 
     exec(command, (error, stdout, stderr) => {
         if (error) {
