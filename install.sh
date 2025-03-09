@@ -1,4 +1,4 @@
 #!/bin/bash
-apt-get update && apt-get install -y wget
-wget https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -O /usr/local/bin/yt-dlp
-chmod a+rx /usr/local/bin/yt-dlp
+mkdir -p /tmp/yt-dlp
+wget https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -O /tmp/yt-dlp/yt-dlp
+chmod +x /tmp/yt-dlp/yt-dlp
