@@ -12,8 +12,8 @@ app.get("/download", (req, res) => {
         return res.status(400).json({ error: "URL is required" });
     }
 
-    // yt-dlp দিয়ে ভিডিওর ডাইরেক্ট ডাউনলোড লিংক বের করা
-    const command = `yt-dlp -f ${format} --get-url "${videoUrl}"`;
+    // yt-dlp বাইনারি /tmp/yt-dlp/yt-dlp থেকে রান করুন
+    const command = `/tmp/yt-dlp/yt-dlp -f ${format} --get-url "${videoUrl}"`;
 
     exec(command, (error, stdout, stderr) => {
         if (error) {
@@ -29,7 +29,7 @@ app.get("/download", (req, res) => {
     });
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
