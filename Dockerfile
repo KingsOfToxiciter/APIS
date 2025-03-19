@@ -3,7 +3,7 @@ FROM node:18
 
 # Install yt-dlp and dependencies
 RUN apt-get update && apt-get install -y ffmpeg wget \
-    && wget -q https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -O /usr/local/bin/yt-dlp \
+    && wget -q https://github.com/yt-dlp/yt-dlp/releases/download/2025.02.19/yt-dlp -O /usr/local/bin/yt-dlp \
     && chmod a+rx /usr/local/bin/yt-dlp
 
 # Set working directory
