@@ -1,0 +1,16 @@
+# .github/workflows/debug-with-tmate.yml
+name: Debug with tmate
+
+on:
+  workflow_dispatch:
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up tmate session
+        uses: mxschmitt/action-tmate@v3
