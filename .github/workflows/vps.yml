@@ -1,4 +1,3 @@
-# .github/workflows/debug-with-tmate.yml
 name: Debug with tmate
 
 on:
